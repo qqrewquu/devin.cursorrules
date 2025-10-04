@@ -13,7 +13,7 @@
 - Add debug information to stderr while keeping the main output clean in stdout for better pipeline integration
 - When using seaborn styles in matplotlib, use 'seaborn-v0_8' instead of 'seaborn' as the style name due to recent seaborn version changes
 - Use `gpt-4o` as the model name for OpenAI. It is the latest GPT model and has vision capabilities as well. `o3` is the most advanced and expensive model from OpenAI. Use it when you need to do reasoning, planning, or get blocked.
-- Use `claude-3-5-sonnet-20241022` as the model name for Claude. It is the latest Claude model and has vision capabilities as well.
+- Use `claude-sonnet-4-5-20250929` as the model name for Claude. It is the latest Claude model (Claude Sonnet 4.5) and has vision capabilities as well.
 - When running Python scripts that import from other local modules, use `PYTHONPATH=.` to ensure Python can find the modules. For example: `PYTHONPATH=. python tools/plan_exec_llm.py` instead of just `python tools/plan_exec_llm.py`. This is especially important when using relative imports.
 
 # Multi-Agent Scratchpad

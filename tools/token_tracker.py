@@ -137,13 +137,15 @@ class TokenTracker:
     @staticmethod
     def calculate_claude_cost(prompt_tokens: int, completion_tokens: int, model: str) -> float:
         """Calculate Claude API cost based on model and token usage"""
-        # Claude-3 Sonnet pricing per 1M tokens
+        # Claude Sonnet pricing per 1M tokens
         # Source: https://www.anthropic.com/claude/sonnet
-        if model in ["claude-3-5-sonnet-20241022", "claude-3-sonnet-20240229"]:
+        if model in ["claude-sonnet-4-5-20250929", "claude-sonnet-4-20250514", "claude-3-5-sonnet-20241022", "claude-3-sonnet-20240229"]:
             INPUT_PRICE_PER_M = 3.0  # $3 per million input tokens
             OUTPUT_PRICE_PER_M = 15.0  # $15 per million output tokens
+            # Note: Claude Sonnet 4.5 pricing assumed to be similar to 3.5 Sonnet
+            # TODO: Update with official pricing when available
         else:
-            raise ValueError(f"Unsupported Claude model for cost calculation: {model}. Only claude-3-5-sonnet-20241022 and claude-3-sonnet-20240229 are supported.")
+            raise ValueError(f"Unsupported Claude model for cost calculation: {model}. Supported models: claude-sonnet-4-5-20250929, claude-sonnet-4-20250514, claude-3-5-sonnet-20241022, claude-3-sonnet-20240229")
         
         input_cost = (prompt_tokens / 1_000_000) * INPUT_PRICE_PER_M
         output_cost = (completion_tokens / 1_000_000) * OUTPUT_PRICE_PER_M

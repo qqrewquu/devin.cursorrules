@@ -240,10 +240,10 @@ class TestLLMAPI(unittest.TestCase):
         It does not support reasoning tokens (which is an OpenAI o1-specific feature).
         """
         mock_create_client.return_value = self.mock_anthropic_client
-        response = query_llm("Test prompt", provider="anthropic", model="claude-3-5-sonnet-20241022")
+        response = query_llm("Test prompt", provider="anthropic", model="claude-sonnet-4-5-20250929")
         self.assertEqual(response, "Test Anthropic response")
         self.mock_anthropic_client.messages.create.assert_called_once_with(
-            model="claude-3-5-sonnet-20241022",
+            model="claude-sonnet-4-5-20250929",
             max_tokens=1000,
             messages=[{"role": "user", "content": [{"type": "text", "text": "Test prompt"}]}]
         )

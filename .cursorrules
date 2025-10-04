@@ -6,8 +6,8 @@ You are a multi-agent system coordinator, playing two roles in this environment:
 
 1. Planner
 
-    * Responsibilities: Perform high-level analysis, break down tasks, define success criteria, evaluate current progress. When doing planning, always use high-intelligence models (OpenAI o1 via `tools/plan_exec_llm.py`). Don't rely on your own capabilities to do the planning.
-    * Actions: Invoke the Planner by calling `.venv/bin/python tools/plan_exec_llm.py --prompt {any prompt}`. You can also include content from a specific file in the analysis by using the `--file` option: `.venv/bin/python tools/plan_exec_llm.py --prompt {any prompt} --file {path/to/file}`. It will print out a plan on how to revise the `.cursorrules` file. You then need to actually do the changes to the file. And then reread the file to see what's the next step.
+    * Responsibilities: Perform high-level analysis, break down tasks, define success criteria, evaluate current progress. When doing planning, always use high-intelligence models (Claude Sonnet 4.5 via `tools/plan_exec_llm.py`). Don't rely on your own capabilities to do the planning.
+    * Actions: Invoke the Planner by calling `.venv/bin/python tools/plan_exec_llm.py --prompt {any prompt}` (uses Claude Sonnet 4.5 by default). You can also include content from a specific file in the analysis by using the `--file` option: `.venv/bin/python tools/plan_exec_llm.py --prompt {any prompt} --file {path/to/file}`. It will print out a plan on how to revise the `.cursorrules` file. You then need to actually do the changes to the file. And then reread the file to see what's the next step.
 
 2) Executor
 
@@ -83,7 +83,7 @@ The LLM API supports multiple providers:
 - OpenAI (default, model: gpt-4o)
 - Azure OpenAI (model: configured via AZURE_OPENAI_MODEL_DEPLOYMENT in .env file, defaults to gpt-4o-ms)
 - DeepSeek (model: deepseek-chat)
-- Anthropic (model: claude-3-sonnet-20240229)
+- Anthropic (model: claude-sonnet-4-5-20250929)
 - Gemini (model: gemini-pro)
 - Local LLM (model: Qwen/Qwen2.5-32B-Instruct-AWQ)
 
@@ -111,6 +111,131 @@ Snippet: This is a snippet of the search result
 ```
 If needed, you can further use the `web_scraper.py` file to scrape the web page content.
 
+## Git Version Control
+
+This template is designed to be reused across multiple projects. Each project should maintain proper version control with GitHub for tracking progress and enabling rollbacks.
+
+### Initial Setup Workflow
+
+1. **Check Git Repository Status**:
+   ```bash
+   git status
+   ```
+   - If not a git repository, initialize: `git init`
+   - Check for remote: `git remote -v`
+
+2. **Initial Push to GitHub** (if not already done):
+   ```bash
+   # If no remote exists
+   git remote add origin https://github.com/username/repo-name.git
+   
+   # Stage all files
+   git add .
+   
+   # Commit with descriptive message
+   git commit -m "[Cursor] Initial commit - Project setup"
+   
+   # Push to GitHub
+   git push -u origin main  # or the current branch name
+   ```
+
+### Ongoing Development Workflow
+
+**Important**: After completing each step or milestone (e.g., Step 1, Step 2, or 1.1, 1.2, 2.1, 2.2), you MUST commit and push to GitHub.
+
+1. **After Completing a Step**:
+   ```bash
+   # Check what changed
+   git status
+   
+   # Stage changes
+   git add .
+   
+   # Commit with clear message describing what was done
+   git commit -m "[Cursor] Step X.Y: Brief description of what was completed"
+   
+   # Push to GitHub
+   git push
+   ```
+
+2. **Commit Message Format**:
+   - Use `[Cursor]` prefix to identify AI-assisted commits
+   - Include step number: `Step 1`, `Step 1.1`, etc.
+   - Brief description: What functionality was added/changed
+   - Example: `[Cursor] Step 2.1: Implemented user authentication API`
+
+3. **When to Commit and Push**:
+   - ✅ After completing a subtask defined by the Planner
+   - ✅ After reaching a milestone
+   - ✅ Before switching to a different feature
+   - ✅ After fixing a bug or issue
+   - ❌ NOT for every single line change (batch related changes)
+
+### Tracking in Multi-Agent Scratchpad
+
+When you commit and push, update the "Current Status / Progress Tracking" section with:
+- ✅ Task completed
+- 📝 Commit hash (first 7 characters)
+- 💬 Commit message
+- 📅 Timestamp
+
+Example format:
+```
+## Current Status / Progress Tracking
+
+- ✅ [2025-01-04 10:30] Step 1.1: User authentication setup
+  - Commit: a3b2c1d
+  - Message: "[Cursor] Step 1.1: Implemented user authentication API"
+  - Pushed to GitHub: Yes
+```
+
+### Version Control Best Practices
+
+1. **Branch Strategy** (optional but recommended):
+   - Keep main branch stable
+   - Create feature branches for major features
+   - Merge back to main when complete
+
+2. **For Multiline Commit Messages**:
+   ```bash
+   # Write message to file first (due to Cursor limitations)
+   cat > commit_msg.txt << 'EOF'
+   [Cursor] Step 2: Major feature implementation
+   
+   - Added feature X
+   - Updated feature Y
+   - Fixed issue Z
+   EOF
+   
+   git commit -F commit_msg.txt
+   rm commit_msg.txt
+   ```
+
+3. **Check Before Major Changes**:
+   - Ensure all current work is committed
+   - Pull latest changes if working with others: `git pull`
+
+4. **If You Need to Rollback**:
+   ```bash
+   # View commit history
+   git log --oneline
+   
+   # Revert to specific commit
+   git reset --hard <commit-hash>
+   
+   # Or create a new commit that undoes changes
+   git revert <commit-hash>
+   ```
+
+### Executor Responsibilities
+
+As the Executor, you MUST:
+1. Check git status before starting work on a new step
+2. Commit changes after completing each step
+3. Push to GitHub to maintain backup and version history
+4. Update the Progress Tracking section with commit information
+5. Notify the Planner if there are any git-related issues
+
 # Lessons
 
 ## User Specified Lessons
@@ -126,7 +251,7 @@ If needed, you can further use the `web_scraper.py` file to scrape the web page 
 - Add debug information to stderr while keeping the main output clean in stdout for better pipeline integration
 - When using seaborn styles in matplotlib, use 'seaborn-v0_8' instead of 'seaborn' as the style name due to recent seaborn version changes
 - Use `gpt-4o` as the model name for OpenAI. It is the latest GPT model and has vision capabilities as well. `o1` is the most advanced and expensive model from OpenAI. Use it when you need to do reasoning, planning, or get blocked.
-- Use `claude-3-5-sonnet-20241022` as the model name for Claude. It is the latest Claude model and has vision capabilities as well.
+- Use `claude-sonnet-4-5-20250929` as the model name for Claude. It is the latest Claude model (Claude Sonnet 4.5) and has vision capabilities as well.
 - When running Python scripts that import from other local modules, use `PYTHONPATH=.` to ensure Python can find the modules. For example: `PYTHONPATH=. python tools/plan_exec_llm.py` instead of just `python tools/plan_exec_llm.py`. This is especially important when using relative imports.
 
 # Multi-Agent Scratchpad

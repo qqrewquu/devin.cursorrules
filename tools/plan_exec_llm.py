@@ -52,7 +52,7 @@ def read_file_content(file_path):
         print(f"Error reading {file_path}: {e}", file=sys.stderr)
         return None
 
-def query_llm_with_plan(plan_content, user_prompt=None, file_content=None, provider="openai", model=None):
+def query_llm_with_plan(plan_content, user_prompt=None, file_content=None, provider="anthropic", model=None):
     """Query the LLM with combined prompts"""
     # Combine prompts
     system_prompt = """"""
@@ -92,7 +92,7 @@ def main():
     parser = argparse.ArgumentParser(description='Query LLM with project plan context')
     parser.add_argument('--prompt', type=str, help='Additional prompt to send to the LLM', required=False)
     parser.add_argument('--file', type=str, help='Path to a file whose content should be included in the prompt', required=False)
-    parser.add_argument('--provider', choices=['openai','anthropic','gemini','local','deepseek','azure'], default='openai', help='The API provider to use')
+    parser.add_argument('--provider', choices=['openai','anthropic','gemini','local','deepseek','azure'], default='anthropic', help='The API provider to use')
     parser.add_argument('--model', type=str, help='The model to use (default depends on provider)')
     args = parser.parse_args()
 

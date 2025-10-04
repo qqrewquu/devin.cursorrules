@@ -46,8 +46,8 @@ This project includes experimental support for a multi-agent system that enhance
 
 ### Architecture
 
-- **Planner** (powered by OpenAI's o1 model): Handles high-level analysis, task breakdown, and strategic planning
-- **Executor** (powered by Claude): Implements specific tasks, runs tests, and handles implementation details
+- **Planner** (powered by Claude Sonnet 4.5): Handles high-level analysis, task breakdown, and strategic planning
+- **Executor** (powered by Claude Sonnet 4.5): Implements specific tasks, runs tests, and handles implementation details
 
 [Actual .cursorrules file](https://github.com/grapeot/devin.cursorrules/blob/multi-agent/.cursorrules#L3)
 
